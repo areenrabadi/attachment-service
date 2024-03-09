@@ -2,10 +2,13 @@ package com.dgcash.emi.attachment.busniess.service;
 
 
 import com.dgcash.emi.attachment.busniess.exceptions.FileNotFoundOnFTPException;
+import com.dgcash.emi.attachment.busniess.exceptions.InvalidFileType;
 import com.dgcash.emi.attachment.busniess.exceptions.UploadFileException;
+import com.dgcash.emi.attachment.common.FileType;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPSClient;
@@ -22,6 +25,8 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import static com.dgcash.emi.attachment.common.FileType.*;
+
 
 @Service
 @RequiredArgsConstructor
@@ -31,18 +36,32 @@ public class FtpService {
     private final SessionFactory<FTPFile> cachingSessionFactory;
     private final PasswordEncoder passwordEncoder;
 
-    @Value("${profile.iban.path}")
-    private String ibanFilePath;
+    @Value("${profile.merchant.iban.path}")
+    private String ibanMerchantPath;
 
-
+    @Value("${profile.customer.iban.path}")
+    private String ibanCustomerPath;
+    @Value("${profile.cr.path}")
+    private String crPath;
+    @Value("${profile.logo.path}")
+    private String logoPath;
+    @Value("${profile.signatory.path}")
+    private String signatoryPath;
+    @Value("${${profile.document.path}")
+    private String documentPath;
     @Value("${profile.vat.path}")
-    private String vatFilePath;
+    private String vatPath;
 
     public String uploadFile(MultipartFile file, String fileName, String fileType) {
         try {
             FTPClient ftpClient = getFtpClient(cachingSessionFactory.getSession());
 
-            boolean storeFile = ftpClient.storeFile(getFilePath(fileType) + fileName, file.getInputStream());
+            String path = getFilePath(fileType);
+            if (!directoryExists(ftpClient, path)) {
+                ftpClient.makeDirectory(path);
+            }
+
+            boolean storeFile = ftpClient.storeFile(path + fileName, file.getInputStream());
             validateStoreFile(storeFile);
             disconnectFtpClient(ftpClient);
         } catch (Exception e) {
@@ -51,10 +70,32 @@ public class FtpService {
         return fileName;
     }
 
-    private String getFilePath(String fileType) {
-        return fileType.equals("iban") ? ibanFilePath : vatFilePath;
+    @SneakyThrows
+    private boolean directoryExists(FTPClient ftpClient, String path) {
+        FTPFile[] files = ftpClient.listFiles(path);
+        return files != null && files.length > 0 && files[0].isDirectory();
     }
 
+    private String getFilePath(String fileType) {
+        switch (FileType.valueOf(StringUtils.upperCase(fileType))) {
+            case IBAN_CUSTOMER:
+                return ibanCustomerPath;
+            case IBAN_MERCHANT:
+                return ibanMerchantPath;
+            case CR:
+                return crPath;
+            case LOGO:
+                return logoPath;
+            case SIGNATORY:
+                return signatoryPath;
+            case DOCUMENT:
+                return documentPath;
+            case VAT:
+                return vatPath;
+            default:
+                throw new InvalidFileType();
+        }
+    }
     private void validateStoreFile(boolean storeFile) {
         Stream.of(storeFile)
                 .filter(Boolean::booleanValue)

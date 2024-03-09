@@ -1,5 +1,6 @@
 package com.dgcash.emi.attachment.busniess.exceptions;
 
+import com.dgcash.common.core.data.dtos.translation.MessageParameter;
 import com.dgcash.common.core.exception.DigitalCashException;
 
 public class UploadFileException extends DigitalCashException {
