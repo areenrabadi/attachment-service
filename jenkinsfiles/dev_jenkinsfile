@@ -55,19 +55,16 @@ pipeline {
 			}
 		}
 
-		stage("Docker connect build to eminetwork") {
-// 			agent { label 'master' }
-			steps {
-				echo 'Start connect container to eminetwork ...'
-				sh """
-					((docker network create myNetwork) || true) && docker network connect myNetwork attachment-service
-				"""
-				sh"""
-				docker system prune -f
-				"""
-				echo 'End connect container to eminetwork ...'
-			}
-		}
+        stage("Docker connect build to bnplnetwork") {
+//          agent { label 'master' }
+            steps {
+                echo 'Start connect container to bnplnetwork ...'
+                sh """
+                    ((docker network create bnplnetwork) || true) && docker network connect bnplnetwork attachment-service
+                """
+                echo 'End connect container to bnplnetwork ...'
+            }
+        }
     }
 
 }
