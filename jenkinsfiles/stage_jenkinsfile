@@ -11,7 +11,7 @@ pipeline {
             steps {
                 
                 echo 'Start clone ...'
-				git branch: 'bnpl-stage', credentialsId: 'a.alkhatib', url: 'https://a-alkhatib@bitbucket.org/Digital_Cash/attachment_service.git'
+				git branch: 'bnpl-stage', credentialsId: 'a.alkhatib', url: 'https://a-alkhatib@bitbucket.org/Digital_Cash/attachment-service.git'
 				echo 'End clone ...'
 
 				echo 'Start maven build ..'
