@@ -11,7 +11,7 @@ pipeline {
             steps {
                 
                 echo 'Start clone ...'
-				git branch: 'init-development', credentialsId: 'fnduYcLLU4rMAJbrHSSw', url: 'https://othmanhassan@bitbucket.org/Digital_Cash/attachment-service.git'
+				git branch: 'bnpl-dev', credentialsId: 'fnduYcLLU4rMAJbrHSSw', url: 'https://othmanhassan@bitbucket.org/Digital_Cash/attachment-service.git'
 				echo 'End clone ...'
 
 				echo 'Start maven build ..'
@@ -49,25 +49,22 @@ pipeline {
 			steps {
 				echo 'Start running the application ...'
 				sh """
-					docker run -m 512m -p 9097:9097  -e EUREKA_SERVER_ADDRESS=http://eurekaservice:8761/eureka -e ACTIVE_PROFILE=dev -d --name attachment-service attachment-service
+					docker run -m 512m -p 9093:9097  -e EUREKA_SERVER_ADDRESS=http://eurekaservice:8761/eureka -e ACTIVE_PROFILE=dev -d --name attachment-service attachment-service
 				"""
 				echo 'End running the application ...'
 			}
 		}
 
-		stage("Docker connect build to eminetwork") {
-// 			agent { label 'master' }
-			steps {
-				echo 'Start connect container to eminetwork ...'
-				sh """
-					((docker network create myNetwork) || true) && docker network connect myNetwork attachment-service
-				"""
-				sh"""
-				docker system prune -f
-				"""
-				echo 'End connect container to eminetwork ...'
-			}
-		}
+        stage("Docker connect build to bnplnetwork") {
+//          agent { label 'master' }
+            steps {
+                echo 'Start connect container to bnplnetwork ...'
+                sh """
+                    ((docker network create bnplnetwork) || true) && docker network connect bnplnetwork attachment-service
+                """
+                echo 'End connect container to bnplnetwork ...'
+            }
+        }
     }
 
 }
