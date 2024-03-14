@@ -13,7 +13,8 @@ public enum FileType {
 	CR("cr"),
 	LOGO("logo"),
 	SIGNATORY("signatory"),
-	DOCUMENT("document");
+	DOCUMENT("document"),
+	NATIONAL_ADDRESS("national_address");
 
 	private final String value;
 }
