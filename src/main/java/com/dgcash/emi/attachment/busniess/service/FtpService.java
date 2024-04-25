@@ -1,6 +1,7 @@
 package com.dgcash.emi.attachment.busniess.service;
 
 
+import com.dgcash.common.core.data.dtos.translation.MessageParameter;
 import com.dgcash.emi.attachment.busniess.exceptions.FileNotFoundOnFTPException;
 import com.dgcash.emi.attachment.busniess.exceptions.InvalidFileType;
 import com.dgcash.emi.attachment.busniess.exceptions.UploadFileException;
@@ -65,7 +66,8 @@ public class FtpService {
             validateStoreFile(storeFile);
             disconnectFtpClient(ftpClient);
         } catch (Exception e) {
-            throw new UploadFileException();
+            MessageParameter messageParameter = new MessageParameter("fileName", fileName);
+            throw new UploadFileException(messageParameter);
         }
         return fileName;
     }
@@ -93,7 +95,8 @@ public class FtpService {
             case VAT:
                 return vatPath;
             default:
-                throw new InvalidFileType();
+                MessageParameter messageParameter = new MessageParameter("fileType", fileType);
+                throw new InvalidFileType(messageParameter);
         }
     }
     private void validateStoreFile(boolean storeFile) {

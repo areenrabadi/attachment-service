@@ -10,4 +10,8 @@ public class UploadFileException extends DigitalCashException {
     public UploadFileException() {
         super(ERROR_CODE);
     }
+
+    public UploadFileException(MessageParameter messageParameter) {
+        super(ERROR_CODE, messageParameter);
+    }
 }
