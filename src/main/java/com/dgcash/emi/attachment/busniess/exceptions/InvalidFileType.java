@@ -4,7 +4,7 @@ import com.dgcash.common.core.data.dtos.translation.MessageParameter;
 import com.dgcash.common.core.exception.DigitalCashException;
 
 public class InvalidFileType extends DigitalCashException {
-	private static final String ERROR_CODE = "INVALID_FILE_TYPE";
+	private static final String ERROR_CODE = "ERR_FILE_400_INVALID_FILE_TYPE";
 	public InvalidFileType() {
 		super(ERROR_CODE);
 	}
