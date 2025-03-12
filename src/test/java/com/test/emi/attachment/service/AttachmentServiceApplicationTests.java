@@ -1,4 +1,4 @@
-package com.dgcash.emi.attachment.service;
+package com.test.emi.attachment.service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

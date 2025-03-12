@@ -8,7 +8,7 @@
 		<version>3.0.10</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.dgcash.emi</groupId>
+	<groupId>com.test.emi</groupId>
 	<artifactId>attachment-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>attachment-service</name>
@@ -51,11 +51,7 @@
 			<artifactId>commons-net</artifactId>
 			<version>3.6</version>
 		</dependency>
-		<dependency>
-			<groupId>com.dgcash.common.core</groupId>
-			<artifactId>dgcash-exception-handler</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
+
 		<dependency>
 			<groupId>io.swagger.core.v3</groupId>
 			<artifactId>swagger-annotations-jakarta</artifactId>
